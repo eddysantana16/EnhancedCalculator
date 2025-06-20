@@ -13,3 +13,6 @@ class ConfigurationError(CalculatorError):
 class DivisionByZeroError(CalculatorError):
     """Exception raised when division by zero occurs."""
     pass
+class CalculationError(Exception):
+    """Custom exception for calculation errors."""
+    pass

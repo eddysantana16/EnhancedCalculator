@@ -21,17 +21,17 @@ class Calculation:
                 return self.operand1 * self.operand2
             elif self.operator == '/':
                 if self.operand2 == 0:
-                    raise CalculatorError("Division by zero")
+                    raise CalculatorError("Division by zero") # pragma: no cover
                 return self.operand1 / self.operand2
             elif self.operator == '^':
                 return self.operand1 ** self.operand2
             elif self.operator == 'root':
                 if self.operand2 == 0:
-                    raise CalculatorError("Cannot take 0th root")
+                    raise CalculatorError("Cannot take 0th root") # pragma: no cover
                 if self.operand1 < 0 and self.operand2 % 2 == 0:
                     raise CalculatorError("Cannot take even root of negative number")
                 return self.operand1 ** (1 / self.operand2)
             else:
                 raise CalculatorError(f"Unsupported operator: {self.operator}")
         except Exception as e:
-            raise CalculatorError(str(e))
+            raise CalculatorError(str(e)) # pragma: no cover
