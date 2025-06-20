@@ -15,7 +15,9 @@ A professional command-line calculator built in Python.
 ## Installation
 
 git clone https://github.com/eddysantana16/EnhancedCalculator.git
+
 cd EnhancedCalculator
+
 pip install -r requirements.txt
 
 ## Create a Virtual environment
