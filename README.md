@@ -21,8 +21,10 @@ pip install -r requirements.txt
 ## Create a Virtual environment
 
 python -m venv venv
-venv\Scripts\activate      # On Windows
-source venv/bin/activate  # On Mac/Linux
+
+venv\Scripts\activate (# On Windows)
+
+source venv/bin/activate  (# On Mac/Linux)
 
 ## Install dependencies
 
@@ -34,10 +36,10 @@ python main.py
 
 ## Example Inputes
 
-> 2 + 3
-> 4 * 5
-> undo
-> help
+> 2 + 3, 
+> 4 * 5,
+> undo,
+> help,
 > exit
 
 ## Running tests
