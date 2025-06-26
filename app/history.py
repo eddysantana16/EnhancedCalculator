@@ -28,6 +28,12 @@ class CalculationHistory:
         # Return pandas DataFrame for tests expecting it
         return pd.DataFrame(self.entries, columns=["Input", "Result"])
 
+    def get_history_str(self):
+        if not self.entries:
+            return ""
+        df = self.get_history()
+        return df.to_string(index=False)
+
     def clear(self):
         self.entries.clear()
         self.undo_stack.clear()
@@ -35,11 +41,11 @@ class CalculationHistory:
         self.save()
 
     def undo(self):
-        if not self.undo_stack: # pragma: no cover
-            raise IndexError("Nothing to undo.") # pragma: no cover
-        last = self.undo_stack.pop() # pragma: no cover
-        self.redo_stack.append(last) # pragma: no cover
-        self.entries.remove(last) # pragma: no cover
+        if not self.undo_stack:  # pragma: no cover
+            raise IndexError("Nothing to undo.")  # pragma: no cover
+        last = self.undo_stack.pop()  # pragma: no cover
+        self.redo_stack.append(last)  # pragma: no cover
+        self.entries.remove(last)  # pragma: no cover
 
     def redo(self):
         if not self.redo_stack:
@@ -58,7 +64,8 @@ class CalculationHistory:
     def load(self):
         try:
             df = pd.read_csv(self.history_file)
-            self.entries = list(df.itertuples(index=False, name=None))
+            # Convert dataframe rows to list of tuples (input, result)
+            self.entries = [(row['Input'], row['Result']) for _, row in df.iterrows()]
             self.undo_stack = self.entries.copy()
             self.redo_stack.clear()
         except FileNotFoundError:

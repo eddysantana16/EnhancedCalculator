@@ -14,6 +14,7 @@ A professional command-line calculator built in Python.
 - Unit Testing: 90%+ test coverage with pytest; includes edge cases and REPL behavior.
 - Design Patterns: Includes Factory, Memento, and Observer patterns.
 - CI/CD: GitHub Actions workflow runs tests, enforces coverage, and uploads coverage reports.
+- color coded outputs for enhanced readability
 
 ## Installation
 
