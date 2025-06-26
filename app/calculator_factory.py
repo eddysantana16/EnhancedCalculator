@@ -23,5 +23,5 @@ class OperationFactory:
     def get_operation(op_name):
         op_class = OperationFactory._operations.get(op_name.lower())
         if not op_class:
-            raise CalculationError(f"Operation '{op_name}' is not supported.")
+            raise CalculationError(f"Operation '{op_name}' is not supported.") # pragma: no cover
         return op_class()

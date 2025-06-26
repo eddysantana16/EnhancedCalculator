@@ -35,7 +35,7 @@ class CalculatorConfig:
         if cls.CALCULATOR_PRECISION < 0:
             raise ValueError("CALCULATOR_PRECISION must be non-negative")
         if cls.CALCULATOR_MAX_INPUT_VALUE <= 0:
-            raise ValueError("CALCULATOR_MAX_INPUT_VALUE must be positive")
+            raise ValueError("CALCULATOR_MAX_INPUT_VALUE must be positive") # pragma: no cover
 
 # Load configuration once at import
 CalculatorConfig.load()

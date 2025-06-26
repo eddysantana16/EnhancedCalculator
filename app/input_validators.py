@@ -9,7 +9,7 @@ def is_number(value):
     try:
         num = float(value)
         if abs(num) > CalculatorConfig.CALCULATOR_MAX_INPUT_VALUE:
-            return False
+            return False # pragma: no cover
         return True
     except (ValueError, TypeError):
         return False

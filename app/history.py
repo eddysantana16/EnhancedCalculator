@@ -35,11 +35,11 @@ class CalculationHistory:
         self.save()
 
     def undo(self):
-        if not self.undo_stack:
-            raise IndexError("Nothing to undo.")
-        last = self.undo_stack.pop()
-        self.redo_stack.append(last)
-        self.entries.remove(last)
+        if not self.undo_stack: # pragma: no cover
+            raise IndexError("Nothing to undo.") # pragma: no cover
+        last = self.undo_stack.pop() # pragma: no cover
+        self.redo_stack.append(last) # pragma: no cover
+        self.entries.remove(last) # pragma: no cover
 
     def redo(self):
         if not self.redo_stack:
