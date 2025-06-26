@@ -1,3 +1,8 @@
+from abc import ABC, abstractmethod
+from app.logger import logger
+from app.history import CalculationHistory
+from app.calculator_config import CalculatorConfig
+
 class Subject:
     def __init__(self):
         self._observers = []
@@ -12,8 +17,20 @@ class Subject:
         for observer in self._observers:
             observer.update(message)
 
-
-class Observer:
+class Observer(ABC):
+    @abstractmethod
     def update(self, message):
-        # This method should be overridden by concrete observers
-        pass  # pragma: no cover
+        pass
+
+class LoggingObserver(Observer):
+    def update(self, message):
+        logger.info(f"Calculation performed: {message}")
+
+class AutoSaveObserver(Observer):
+    def __init__(self, history: CalculationHistory):
+        self.history = history
+
+    def update(self, message):
+        if CalculatorConfig.CALCULATOR_AUTO_SAVE:
+            self.history.save()
+            logger.info("History auto-saved after operation.")

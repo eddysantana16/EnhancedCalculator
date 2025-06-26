@@ -1,16 +1,24 @@
 import os
 import pytest
-from app.calculator_config import load_config
-from app.exceptions import ConfigurationError
+from app.calculator_config import CalculatorConfig
 
-def test_load_valid_config(monkeypatch):
-    # Set environment variable for testing
-    monkeypatch.setenv("HISTORY_FILE", "test_history.csv")
-    config = load_config()
-    assert config["HISTORY_FILE"] == "test_history.csv"
+def test_env_var_auto_save(monkeypatch):
+    # Patch CALCULATOR_AUTO_SAVE environment variable
+    monkeypatch.setenv("CALCULATOR_AUTO_SAVE", "True")
+    monkeypatch.setenv("CALCULATOR_MAX_HISTORY_SIZE", "10")  # valid size for validation
 
-def test_missing_config(monkeypatch):
-    # Ensure variable is not set
-    monkeypatch.delenv("HISTORY_FILE", raising=False)
-    with pytest.raises(ConfigurationError):
-        load_config()
+    # Reload config to pick up monkeypatched env vars
+    CalculatorConfig.load()
+
+    assert CalculatorConfig.CALCULATOR_AUTO_SAVE is True
+    assert CalculatorConfig.CALCULATOR_MAX_HISTORY_SIZE == 10
+
+def test_invalid_max_history_size(monkeypatch):
+    monkeypatch.setenv("CALCULATOR_MAX_HISTORY_SIZE", "-1")
+    with pytest.raises(ValueError):
+        CalculatorConfig.load()
+
+def test_invalid_precision(monkeypatch):
+    monkeypatch.setenv("CALCULATOR_PRECISION", "-5")
+    with pytest.raises(ValueError):
+        CalculatorConfig.load()

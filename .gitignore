@@ -1,18 +1,69 @@
-# Python
+
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
 *.egg
 *.egg-info/
-dist/
-build/
+.eggs/
 
-# venv
-venv/
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
 
-# dotenv
-.env
-
-# coverage
+# Unit test / coverage reports
 htmlcov/
+.tox/
+.nox/
 .coverage
 .cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# Virtual environments
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+
+# PyInstaller
+*.manifest
+*.spec
+
+# dotenv environment variables file
+.env
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# VS Code settings folder
+.vscode/
+
+# JetBrains IDEs
+.idea/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Logs
+*.log
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini

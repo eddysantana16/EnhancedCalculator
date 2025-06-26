@@ -3,6 +3,7 @@ from app.operations import (
     AddOperation, SubtractOperation, MultiplyOperation,
     DivideOperation, PowerOperation, RootOperation,
 )
+from app.exceptions import DivisionByZeroError, CalculationError
 
 def test_add_operation():
     op = AddOperation()
@@ -23,7 +24,7 @@ def test_divide_operation():
     op = DivideOperation()
     assert op.execute(10, 2) == 5
     assert op.execute(-10, 2) == -5
-    with pytest.raises(ZeroDivisionError):
+    with pytest.raises(DivisionByZeroError):
         op.execute(5, 0)
 
 def test_power_operation():
@@ -35,9 +36,9 @@ def test_root_operation():
     op = RootOperation()
     assert op.execute(27, 3) == 3
     assert op.execute(16, 4) == 2
-    with pytest.raises(ValueError):
+    with pytest.raises(CalculationError):
         op.execute(-16, 2)  # even root of negative number not allowed
-    with pytest.raises(ValueError):
+    with pytest.raises(CalculationError):
         op.execute(16, 0)   # zero root undefined
 
 def test_root_negative_odd():

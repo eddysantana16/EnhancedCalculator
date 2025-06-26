@@ -1,30 +1,67 @@
 import pandas as pd
+from app.calculator_config import CalculatorConfig
+import os
 
 class CalculationHistory:
-    def __init__(self, filename="history.csv"):
-        self.filename = filename
-        try:
-            self.history = pd.read_csv(self.filename)
-        except FileNotFoundError:
-            self.history = pd.DataFrame(columns=["Input", "Result"])
+    def __init__(self, filename=None):
+        # Use given filename or default path from config and env var
+        if filename:
+            self.history_file = filename
+        else:
+            self.history_file = os.path.join(
+                CalculatorConfig.CALCULATOR_HISTORY_DIR,
+                os.getenv("HISTORY_FILE", "calc_history.csv")
+            )
+        self.entries = []  # list of (input, result)
+        self.undo_stack = []
+        self.redo_stack = []
 
-    def add_entry(self, calculation_input, result):
-        new_entry = {"Input": calculation_input, "Result": result}
-        new_df = pd.DataFrame([new_entry])
-        # Filter out empty or all-NA columns before concatenation to avoid FutureWarning
-        dfs_to_concat = [df for df in [self.history, new_df] if not df.empty and df.dropna(axis=1, how='all').shape[1] > 0]
-        self.history = pd.concat(dfs_to_concat, ignore_index=True)
+        # Load existing history
+        self.load()
+
+    def add_entry(self, calc_input, result):
+        self.entries.append((calc_input, result))
+        self.undo_stack.append((calc_input, result))
+        self.redo_stack.clear()  # reset redo stack
 
     def get_history(self):
-        return self.history
-
-    def save(self):
-        self.history.to_csv(self.filename, index=False)
-
-    def load(self):
-        """Reload history from file (used in tests)."""
-        self.history = pd.read_csv(self.filename)
+        # Return pandas DataFrame for tests expecting it
+        return pd.DataFrame(self.entries, columns=["Input", "Result"])
 
     def clear(self):
-        self.history = pd.DataFrame(columns=["Input", "Result"])
+        self.entries.clear()
+        self.undo_stack.clear()
+        self.redo_stack.clear()
         self.save()
+
+    def undo(self):
+        if not self.undo_stack:
+            raise IndexError("Nothing to undo.")
+        last = self.undo_stack.pop()
+        self.redo_stack.append(last)
+        self.entries.remove(last)
+
+    def redo(self):
+        if not self.redo_stack:
+            raise IndexError("Nothing to redo.")
+        entry = self.redo_stack.pop()
+        self.entries.append(entry)
+        self.undo_stack.append(entry)
+
+    def save(self):
+        df = pd.DataFrame(self.entries, columns=["Input", "Result"])
+        dir_path = os.path.dirname(self.history_file)
+        if dir_path and not os.path.exists(dir_path):
+            os.makedirs(dir_path, exist_ok=True)
+        df.to_csv(self.history_file, index=False)
+
+    def load(self):
+        try:
+            df = pd.read_csv(self.history_file)
+            self.entries = list(df.itertuples(index=False, name=None))
+            self.undo_stack = self.entries.copy()
+            self.redo_stack.clear()
+        except FileNotFoundError:
+            self.entries = []
+            self.undo_stack = []
+            self.redo_stack = []
